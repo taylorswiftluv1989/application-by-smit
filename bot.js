@@ -1,6 +1,5 @@
 // version 4
 // Celebritygossip-smitty
-// heroku apps:info
 //https://www.linkcollider.com/page/articlespinner
 
 // Create object reference to libs
