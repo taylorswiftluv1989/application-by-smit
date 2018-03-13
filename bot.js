@@ -1,33 +1,45 @@
-// version 3.2
+// version 4
 // Celebritygossip-smitty
+// heroku apps:info
+//https://www.linkcollider.com/page/articlespinner
 
 // Create object reference to libs
-
 var Twit = require('twit');
 var fs = require('fs');
 var config = require('./config.js');
-
 
 // Database file
 var DB_FILE = "bot_db.txt";
 
 // Set interval time. Try to use a not so small interval to avoid Twitter to lock your account.
-var INTERVAL = 60*60*1000; //  hours
+var INTERVAL = 60*60000; // hours 
 
 // Set Twitter search phrase. You can use hash tags or simples text. Hash tags works better. Separate with OR or AND.
-var TWITTER_SEARCH_PHRASE = 'bollywood'; 
+var TWITTER_SEARCH_PHRASE = 'bollywood'; //OR Shah Rukh Khan
 
 // Set max number of tweets to get on the search results each time
-var TWITTER_SEARCH_MAX_RESULTS = 2;
+var TWITTER_SEARCH_MAX_RESULTS = 5;
 
-// Celebritygossip - fan - bot
+// wwe - fan - bot
 var tweet_count = 0;
 
 const Spinner = require('node-spintax');
 
 var Bot = new Twit(config);
 
+try {  
+    var Text_Output = fs.readFileSync('my-file.txt', 'utf8');
+    console.log("Text_Output: " +Text_Output);    
+} catch(e) {
+    console.log('Error:', e.stack);
+}
+
+
 function BotStart() {
+
+  INTERVAL= Math.floor((Math.random() * 60000)) + Math.floor((Math.random() * 60000)) + 3600000;
+  var mins_time = INTERVAL / 1000 / 60; //60000
+  console.log(INTERVAL +" mins: "+ mins_time);
 
   var query = {
     q: TWITTER_SEARCH_PHRASE,
@@ -82,7 +94,7 @@ function BotStart() {
 // Youtube_links   
 //
 
-var Youtube_links = new Spinner('{Top 8 Hottest Female Who Hookup With Sunny Leone {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/SKoJgC2SW0g |Top 10 Salman Khan Girlfriends {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/UT9gX5B0Q6w |Top 10 Most Expensive Hollywood Films 2018 {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/-LvhcNMg-2s |Top 10 Most Expensive Indian/bollywood Films 2018 {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/C-Sai-aFQao |Why Aamir Khan Is A Mr Perfectionist {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/1n6hD1r4NmE |Aamir Khan all hot kissing scenes {and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube} {thx|thanks|Thnx|Thank You|} {!|!!|.} https://youtu.be/JLimkQE0xcM}');
+var Youtube_links = new Spinner(Text_Output);
 
 // Returns total number of possible variations: 
 var variationsCount_Youtube_links = Youtube_links.countVariations();
@@ -93,6 +105,28 @@ var allVariations_Youtube_links = Youtube_links.unspin();
 
 var spintax_Youtube_links =allVariations_Youtube_links[Math.floor(Math.random()*allVariations_Youtube_links.length)];
 //console.log("spintax_Youtube_links: " + spintax_Youtube_links );
+
+//
+// sharing_text
+//
+
+var sharing_text = new Spinner('{and|&} share {your|ur} {comments|comment|thought|idea|opinion|view|impression} on {youtube|Utube}{.|..|!} if {you|U} {like|love} it then {please|plz|do} subscribe {my|our} {youtube|Utube} {channel|channel} for more {video|videos} {thx|thanks|Thnx|Thank You} {!|!!|.}');
+
+// Returns total number of possible variations: 
+var variationsCount_sharing_text = sharing_text.countVariations();
+ 
+// Returns list of all possible variations: 
+var allVariations_sharing_text = sharing_text.unspin();
+//console.log("allVariations_sharing_text: " + allVariations_sharing_text );
+
+var spintax_sharing_text =allVariations_sharing_text[Math.floor(Math.random()*allVariations_sharing_text.length)];
+//console.log("spintax_sharing_text: " + spintax_sharing_text );
+
+// combine_youtube_link_text
+
+var combine_youtube_links_text = spintax_Youtube_links.replace(/SMIT/g, spintax_sharing_text);
+//console.log("combine_youtube_links_text: " + combine_youtube_links_text + '\n');
+
 
 //
 // starting_text
@@ -110,6 +144,9 @@ var allVariations_starting_text = starting_text.unspin();
 var spintax_starting_text =allVariations_starting_text[Math.floor(Math.random()*allVariations_starting_text.length)];
 //console.log("spintax_starting_text: " + spintax_starting_text );
 
+//
+// request_to_watch
+// 
 
 var request_to_watch = new Spinner('{please|plz} {check out|look at|stop by|go to|watch out} {my|our|this} video');
 
@@ -123,11 +160,10 @@ var allVariations_request_to_watch = request_to_watch.unspin();
 var spintax_request_to_watch =allVariations_request_to_watch[Math.floor(Math.random()*allVariations_request_to_watch.length)];
 //console.log("spintax_request_to_watch: " + spintax_request_to_watch );
 
-var userHandle1 = "smitpatel108";
-var username1 = "smit patel";
 
 // final_tweet
-var final_tweet = "@" + userHandle +" "+spintax_starting_text + username +" "+spintax_request_to_watch +", "+spintax_Youtube_links; // + " -" + Math.floor(Math.random()*1000);
+var final_tweet = "@" + userHandle +", "+spintax_starting_text + username +" "+spintax_request_to_watch +", "+combine_youtube_links_text ; 
+// + " -" + Math.floor(Math.random()*1000);
 console.log('\n' +"final_tweet: " + final_tweet ); //'\n' + 
 
                         
@@ -141,16 +177,12 @@ console.log('\n' +"final_tweet: " + final_tweet ); //'\n' +
                   console.log("Error on save to '" + DB_FILE + "' file.");
                 }
                 });
-
-              //Reply
-                            
+              
               Bot.post('statuses/update', {status: final_tweet, in_reply_to_status_id: id}, function(err, response){
                     if (err) {
                       console.log("> Error: Status could not be updated. " + err);
                     }
                 });
-             
-
 
             }
 
@@ -170,7 +202,7 @@ console.log('\n' +"final_tweet: " + final_tweet ); //'\n' +
         }
       });
 
-    }
+    } 
 
   }
 
@@ -179,5 +211,3 @@ console.log('\n' +"final_tweet: " + final_tweet ); //'\n' +
 // Start bot and timer
 BotStart();
 setInterval(BotStart, INTERVAL);
-
-
